@@ -1,0 +1,8 @@
+.gitignore
+*.pyc
+testem/static
+testem/settings.py
+**/media
+
+# IDE files
+.idea

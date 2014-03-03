@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+{% block extra_head %}{% endblock %}
+
+
+{% block content %}
+
+
+    <div class="container marketing">
+            <h1>{% block page_heading %}{% endblock %}</h1>
+
+            {% block inner_content %}{% endblock %}
+
+       <hr class="featurette-divider">
+
+
+               {% include "footer.html" %}
+
+    </div><!-- /.container -->
+
+
+{% endblock %}

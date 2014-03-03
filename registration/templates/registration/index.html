@@ -1,0 +1,25 @@
+{% extends "inner.html" %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block page_heading %}Регистрация{% endblock %}
+
+{% block inner_content %}
+
+
+{% if success %}
+    <p>Вы успешно зарегистрировались!</p>
+{% else %}
+
+<form action="." method="post">{% csrf_token %}
+    <table>
+        {{ form }}
+    </table>
+    <input type="submit" value="Отправить">
+    </form>
+
+{% endif %}
+
+
+
+{% endblock %}
