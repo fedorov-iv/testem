@@ -1,13 +1,14 @@
-{% extends "template_InnerPage.html" %}
+{% extends "inner.html" %}
 
-{% load cms_tags %}
+{% block title %}Авторизация{% endblock %}
 
+{% block page_heading %}Авторизация{% endblock %}
 
-{% block inner_base_content %}
-
+{% block inner_content %}
 {% if not_found %}
     <p>Пользователь не найден!</p>
 {% else %}
     <p>Учетная запись успешно активирована!</p>
 {% endif %}
 {% endblock %}
+
