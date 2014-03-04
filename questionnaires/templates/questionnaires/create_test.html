@@ -1,0 +1,36 @@
+{% extends "inner.html" %}
+{% load project_tags %}
+{% block title %}Создать тест{% endblock %}
+
+{% block page_heading %}Создать тест{% endblock %}
+
+{% block inner_content %}
+{% if not success %}
+    <form action="." method="post">
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="form-group {% if form.title.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_first_name">Название теста:</label>
+            {{ form.title|addcss:"form-control" }}
+
+        </div>
+        {{ form.title.errors }}
+
+        <div class="form-group {% if form.description.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_last_name">Описание теста:</label>
+            {{ form.description|addcss:"form-control" }}
+
+        </div>
+        {{ form.description.errors }}
+        {% csrf_token %}
+        <input type="submit" value="Сохранить" class="btn btn-primary"/>
+    </form>
+{% else %}
+    <p>Тест успешно создан!</p>
+{% endif %}
+
+{% endblock %}
