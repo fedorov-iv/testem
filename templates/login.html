@@ -1,0 +1,39 @@
+{% extends "inner.html" %}
+{% load project_tags %}
+{% block title %}Авторизация{% endblock %}
+
+{% block page_heading %}Авторизация{% endblock %}
+
+{% block inner_content %}
+
+    <form action="{% url "login" %}" method="post" accept-charset="utf-8">
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+
+        <div class="form-group {% if form.username.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_username">Логин:</label>
+            {{ form.username|addcss:"form-control" }}
+
+        </div>
+        {{ form.username.errors }}
+        <div class="form-group {% if form.password.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_password">Пароль:</label>
+            {{ form.password|addcss:"form-control" }}
+
+        </div>
+       {{ form.password.errors }}
+
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{% url "home" %}"/>
+        <input class="btn btn-default" type="submit" value="Войти"/>
+    </form>
+
+{% endblock %}
+
+
+
+

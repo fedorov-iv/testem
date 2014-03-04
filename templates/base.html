@@ -55,8 +55,14 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <!--<li><a href="../navbar/">Default</a></li>
-            <li class="active"><a href="./">Static top</a></li>
+              {% if user.is_authenticated %}
+                  <li><a nohref="nohref">Вы вошли как: {{ user.username }}</a></li>
+                  <li><a href="{% url "logout" %}?next={% url "login" %}">Выйти</a></li>
+              {% else %}
+                  <li><a href="{% url "login" %}">Войти</a></li>
+              {% endif %}
+
+            <!--<li class="active"><a href="./">Static top</a></li>
             <li><a href="../navbar-fixed-top/">Fixed top</a></li>-->
           </ul>
         </div><!--/.nav-collapse -->

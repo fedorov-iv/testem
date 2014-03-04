@@ -45,7 +45,7 @@ def index(request):
     else:
         f = RegistrationForm()
 
-    context = {'form': f.as_table(), 'success': success}
+    context = {'form': f, 'success': success}
     return render(request, 'registration/index.html', context)
 
 
