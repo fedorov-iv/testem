@@ -1,0 +1,15 @@
+{% extends "inner.html" %}
+{% load project_tags %}
+{% block title %}Создать тест{% endblock %}
+
+{% block page_heading %}Создать тест{% endblock %}
+
+{% block inner_content %}
+
+    <ul class="nav nav-tabs">
+      <li><a href="{% url "create_test" %}">Свойства</a></li>
+      <li class="active"><a href="{% url "create_questions" %}">Вопросы</a></li>
+    </ul>
+
+
+{% endblock %}

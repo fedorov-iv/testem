@@ -24,3 +24,8 @@ def create_test(request):
         f = QuestionnaireForm()
 
     return render(request, 'questionnaires/create_test.html', {'form': f, 'success': success})
+
+
+@login_required
+def create_questions(request):
+    return render(request, 'questionnaires/create_questions.html')

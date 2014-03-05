@@ -17,8 +17,13 @@ ul.errorlist li{
 -------------------------------------------------- */
 
 /* Navbar positioning foo */
+
 .navbar {
- margin-bottom: 0;
+    margin-bottom: 0;
+}
+
+.nav-tabs{
+    margin-bottom: 20px;
 }
 
 /* Special class on .container surrounding .navbar, used for positioning it into place. */

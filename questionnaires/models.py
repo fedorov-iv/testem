@@ -65,7 +65,7 @@ class UserAnswer(models.Model):
     #  максимально возможное количество баллов в тесте
     test_score = models.IntegerField(verbose_name=u'Максимальный балл теста', default=0)
     #  количество баллов, набранное пользователем в тесте
-    user_srore = models.IntegerField(verbose_name=u'Набранные баллы', default=0)
+    user_score = models.IntegerField(verbose_name=u'Набранные баллы', default=0)
 
     def __unicode__(self):
         return self.title

@@ -5,6 +5,11 @@
 {% block page_heading %}Создать тест{% endblock %}
 
 {% block inner_content %}
+
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="{% url "create_test" %}">Свойства</a></li>
+      <li><a href="{% url "create_questions" %}">Вопросы</a></li>
+    </ul>
 {% if not success %}
     <form action="." method="post">
         {% if form.non_field_errors %}
@@ -27,10 +32,12 @@
         </div>
         {{ form.description.errors }}
         {% csrf_token %}
-        <input type="submit" value="Сохранить" class="btn btn-primary"/>
+        <input type="submit" value="Сохранить" class="btn btn-primary"/>   <input type="submit" value="Сохранить и выйти" class="btn btn-primary"/>
     </form>
 {% else %}
-    <p>Тест успешно создан!</p>
+    <div class="alert alert-success">
+        <p>Тест успешно создан!</p>
+    </div>
 {% endif %}
 
 {% endblock %}
