@@ -1,13 +1,36 @@
 {% extends "inner.html" %}
 {% load project_tags %}
 {% block title %}Мои материалы{% endblock %}
+{% block extra_head %}
+    <script type="text/javascript">
+        function deleteTest(id){
+            window.location.href = '{% url 'delete_test' %}' + id +'/';
+
+
+        }
+
+    </script>
+
+{% endblock %}
 
 {% block page_heading %}Мои материалы{% endblock %}
 
 {% block inner_content %}
 
     <h3>Мои тесты</h3>
-    <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'create_test' %}'" style="float: right">Создать тест</button>
+    <!-- alert -->
+     <div class="bs-example" id="alert">
+    <div class="alert alert-danger fade in">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <h4>Внимание!</h4>
+      <p>Вы дествительно хотите удалить этот объект?</p>
+      <p>
+        <button type="button" class="btn btn-danger">Удалить</button>
+        <button type="button" class="btn btn-default">Отменить</button>
+      </p>
+    </div>
+  </div><!-- alert END -->
+    <button type="button" class="btn btn-default" onclick="window.location.href='{% url 'create_test' %}'" style="float: right">Создать тест</button>
     <div style="clear: both; padding:10px"></div>
         <div class="table-responsive">
         {% if tests %}
@@ -38,7 +61,7 @@
                   </td>
                   <td  align="right">
                       <button type="button" class="btn btn-success btn-xs" onclick="window.location.href = '{% url 'create_test' %}{{ test.id }}/'">Редактировать</button>
-                      <button type="button" class="btn btn-danger btn-xs" onclick="window.location.href = '{% url 'delete_test' %}{{ test.id }}/'">Удалить</button>
+                      <button type="button" class="btn btn-danger btn-xs" onclick="confirm('Вы уверены?')">Удалить</button>
                   </td>
                 </tr>
 
