@@ -10,7 +10,7 @@
       <li class="active"><a href="{% url "create_test" %}">Свойства</a></li>
       <li><a href="{% url "create_questions" %}">Вопросы</a></li>
     </ul>
-{% if not success %}
+
     <form action="." method="post">
         {% if form.non_field_errors %}
             <div class="alert alert-danger">
@@ -19,25 +19,29 @@
         {% endif %}
 
         <div class="form-group {% if form.title.errors %}has-error{% endif %}">
-            <label class="control-label" for="id_first_name">Название теста:</label>
+            <label class="control-label" for="id_title">Название теста:</label>
             {{ form.title|addcss:"form-control" }}
 
         </div>
         {{ form.title.errors }}
 
         <div class="form-group {% if form.description.errors %}has-error{% endif %}">
-            <label class="control-label" for="id_last_name">Описание теста:</label>
+            <label class="control-label" for="id_description">Описание теста:</label>
             {{ form.description|addcss:"form-control" }}
 
         </div>
         {{ form.description.errors }}
+
+        <div class="form-group {% if form.is_active.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_is_active">
+            {{ form.is_active }}Опубликован
+            </label>
+        </div>
+        {{ form.is_active.errors }}
         {% csrf_token %}
-        <input type="submit" value="Сохранить" class="btn btn-primary"/>   <input type="submit" value="Сохранить и выйти" class="btn btn-primary"/>
+
+        <input type="submit" name="save" value="Сохранить" class="btn btn-primary"/>   <input type="submit" name="exit" value="Сохранить и выйти" class="btn btn-primary"/> <input type="submit" name="delete" value="Удалить" class="btn btn-danger"/>
     </form>
-{% else %}
-    <div class="alert alert-success">
-        <p>Тест успешно создан!</p>
-    </div>
-{% endif %}
+
 
 {% endblock %}

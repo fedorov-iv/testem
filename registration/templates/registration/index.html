@@ -8,7 +8,9 @@
 
 
 {% if success %}
-    <p>Вы успешно зарегистрировались!</p>
+    <div class="alert alert-success">
+        <p>Вы успешно зарегистрировались!</p>
+    </div>
 {% else %}
 
 <form action="." method="post">{% csrf_token %}
