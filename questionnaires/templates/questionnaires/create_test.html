@@ -7,8 +7,10 @@
 {% block inner_content %}
 
     <ul class="nav nav-tabs">
-      <li class="active"><a href="{% url "create_test" %}">Свойства</a></li>
-      <li><a href="{% url "create_questions" %}">Вопросы</a></li>
+      <li class="active"><a href="{% url "create_test" %}{% if form.instance %}{{ form.instance.id }}/{% endif %}">Свойства</a></li>
+    {%  if form.instance.id %}
+      <li><a href="{% url "create_questions"%}{{ form.instance.id }}/">Вопросы</a></li>
+    {% endif %}
     </ul>
 
     <form action="." method="post">

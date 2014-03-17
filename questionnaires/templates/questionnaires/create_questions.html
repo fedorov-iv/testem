@@ -7,8 +7,8 @@
 {% block inner_content %}
 
     <ul class="nav nav-tabs">
-      <li><a href="{% url "create_test" %}">Свойства</a></li>
-      <li class="active"><a href="{% url "create_questions" %}">Вопросы</a></li>
+      <li><a href="{% url "create_test" %}{% if questionnaire_id %}{{ questionnaire_id }}/{% endif %}">Свойства</a></li>
+      <li class="active"><a href="{% url "create_questions" %}{% if questionnaire_id %}{{ questionnaire_id }}/{% endif %}">Вопросы</a></li>
     </ul>
 
 

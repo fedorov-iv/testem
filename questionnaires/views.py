@@ -70,5 +70,5 @@ def delete_test(request, questionnaire_id=0):
 
 
 @login_required
-def create_questions(request):
-    return render(request, 'questionnaires/create_questions.html')
+def create_questions(request, questionnaire_id=0):
+    return render(request, 'questionnaires/create_questions.html', {'questionnaire_id': questionnaire_id})
