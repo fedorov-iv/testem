@@ -3,10 +3,31 @@
 {% block title %}Мои материалы{% endblock %}
 {% block extra_head %}
     <script type="text/javascript">
+
+    $(document).ready(function(){
+         //$(".alert").alert();
+
+    });
+
+
         function deleteTest(id){
-            window.location.href = '{% url 'delete_test' %}' + id +'/';
+            //window.location.href = '{% url 'delete_test' %}' + id +'/';
+            $('#delbtn').unbind('click');
+            $("#delbtn").click(function(){
+                alert(id);
 
+            });
+            $(".alert").show();
 
+            //$(".alert").alert();
+            //$(".alert").removeClass('hide');
+            //alert('ddd');
+
+        }
+
+        function closeAlert(){
+           $('#delbtn').unbind('click');
+           $(".alert").hide();
         }
 
     </script>
@@ -19,17 +40,17 @@
 
     <h3>Мои тесты</h3>
     <!-- alert -->
-     <div class="bs-example" id="alert">
-    <div class="alert alert-danger fade in">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+    <div class="alert alert-danger fade in" style="display: none">
+      <button type="button" class="close" aria-hidden="true" onclick="closeAlert();">&times;</button>
       <h4>Внимание!</h4>
       <p>Вы действительно хотите удалить этот объект?</p>
       <p>
-        <button type="button" class="btn btn-danger">Удалить</button>
-        <button type="button" class="btn btn-default">Отменить</button>
+        <button type="button" class="btn btn-danger" id="delbtn">Удалить</button>
+        <button type="button" class="btn btn-default" onclick="closeAlert();">Отменить</button>
       </p>
     </div>
-  </div><!-- alert END -->
+  <!-- alert END -->
     <button type="button" class="btn btn-default" onclick="window.location.href='{% url 'create_test' %}'" style="float: right">Создать тест</button>
     <div style="clear: both; padding:10px"></div>
         <div class="table-responsive">
@@ -61,7 +82,7 @@
                   </td>
                   <td  align="right">
                       <button type="button" class="btn btn-success btn-xs" onclick="window.location.href = '{% url 'create_test' %}{{ test.id }}/'">Редактировать</button>
-                      <button type="button" class="btn btn-danger btn-xs" onclick="confirm('Вы уверены?')">Удалить</button>
+                      <button type="button" class="btn btn-danger btn-xs" onclick="deleteTest({{ test.id }});">Удалить</button>
                   </td>
                 </tr>
 
