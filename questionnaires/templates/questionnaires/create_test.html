@@ -42,7 +42,7 @@
         {{ form.is_active.errors }}
         {% csrf_token %}
 
-        <input type="submit" name="save" value="Сохранить" class="btn btn-default"/>   <input type="submit" name="exit" value="Сохранить и выйти" class="btn btn-default"/> <input type="submit" name="delete" value="Удалить" class="btn btn-danger"/>
+        <input type="submit" name="save" value="Сохранить" class="btn btn-default"/>   <input type="submit" name="exit" value="Сохранить и выйти" class="btn btn-default"/> {%  if form.instance.id %}<input type="submit" name="delete" value="Удалить" class="btn btn-danger"/>{% endif %}
     </form>
 
 
