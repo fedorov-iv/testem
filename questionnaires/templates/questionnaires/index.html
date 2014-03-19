@@ -4,25 +4,20 @@
 {% block extra_head %}
     <script type="text/javascript">
 
-    $(document).ready(function(){
+    //$(document).ready(function(){
          //$(".alert").alert();
 
-    });
+    //});
 
 
         function deleteTest(id){
-            //window.location.href = '{% url 'delete_test' %}' + id +'/';
+
             $('#delbtn').unbind('click');
             $("#delbtn").click(function(){
-                alert(id);
-
+                //alert(id);
+                window.location.href='{% url 'delete_test' %}'+ id +'/'
             });
             $(".alert").show();
-
-            //$(".alert").alert();
-            //$(".alert").removeClass('hide');
-            //alert('ddd');
-
         }
 
         function closeAlert(){

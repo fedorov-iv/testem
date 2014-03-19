@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     url(r'^createtest/$', views.create_test, name='create_test'),
     url(r'^createtest/(?P<questionnaire_id>[1-9]\d*)/$', views.create_test, name='create_test'),
     url(r'^deletetest/$', views.delete_test, name='delete_test'),
-    url(r'^deletetest/(?P<questionnaire_id>[1-9]\d*)/$', views.delete_test),
+    url(r'^deletetest/(?P<questionnaire_id>[1-9]\d*)/$', views.delete_test, name='delete_test'),
     url(r'^createquestions/$', views.create_questions, name='create_questions'),
     url(r'^createquestions/(?P<questionnaire_id>[1-9]\d*)/$', views.create_questions, name='create_questions'),
 

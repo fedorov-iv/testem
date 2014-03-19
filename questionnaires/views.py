@@ -37,11 +37,14 @@ def create_test(request, questionnaire_id=0):
 
     if questionnaire_id:
         #questionnaire = Questionnaire.objects.get(pk=questionnaire_id)
-        questionnaire = get_object_or_404(Questionnaire, pk=questionnaire_id)
+        questionnaire = get_object_or_404(Questionnaire, pk=questionnaire_id, author=request.user)
 
     if request.method == 'POST':
 
         f = QuestionnaireForm(request.POST, instance=questionnaire)
+        if request.POST.get('delete'):
+            return redirect(reverse('delete_test', args=[f.instance.id]))
+
         if f.is_valid():
 
             f.instance.author = request.user
@@ -64,7 +67,7 @@ def create_test(request, questionnaire_id=0):
 
 @login_required
 def delete_test(request, questionnaire_id=0):
-    questionnaire = get_object_or_404(Questionnaire, pk=questionnaire_id)
+    questionnaire = get_object_or_404(Questionnaire, pk=questionnaire_id, author=request.user)
     questionnaire.delete()
     return redirect(reverse("account"))
 
