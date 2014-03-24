@@ -10,9 +10,10 @@
     //});
 
 
-        function deleteTest(id){
+        function deleteTest(id, objname){
 
             $('#delbtn').unbind('click');
+            $('#objname').html(objname);
             $("#delbtn").click(function(){
                 //alert(id);
                 window.location.href='{% url 'delete_test' %}'+ id +'/'
@@ -22,6 +23,7 @@
 
         function closeAlert(){
            $('#delbtn').unbind('click');
+           $('#objname').html('');
            $(".alert").hide();
         }
 
@@ -39,7 +41,7 @@
     <div class="alert alert-danger fade in" style="display: none">
       <button type="button" class="close" aria-hidden="true" onclick="closeAlert();">&times;</button>
       <h4>Внимание!</h4>
-      <p>Вы действительно хотите удалить этот объект?</p>
+      <p>Вы действительно хотите удалить объект <span id="objname" style="font-weight: bold"></span>?</p>
       <p>
         <button type="button" class="btn btn-danger" id="delbtn">Удалить</button>
         <button type="button" class="btn btn-default" onclick="closeAlert();">Отменить</button>
@@ -50,11 +52,11 @@
     <div style="clear: both; padding:10px"></div>
         <div class="table-responsive">
         {% if tests %}
-            <table class="table">
+            <table class="table table-hover">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Название теста</th>
+                  <th style="width: 40%">Название теста</th>
                   <th>Вопросы</th>
                   <th>Дата создания</th>
                   <th>Опубликован</th>
@@ -77,7 +79,7 @@
                   </td>
                   <td  align="right">
                       <button type="button" class="btn btn-success btn-xs" onclick="window.location.href = '{% url 'create_test' %}{{ test.id }}/'">Редактировать</button>
-                      <button type="button" class="btn btn-danger btn-xs" onclick="deleteTest({{ test.id }});">Удалить</button>
+                      <button type="button" class="btn btn-danger btn-xs" onclick="deleteTest({{ test.id }}, '{{ test.title }}');">Удалить</button>
                   </td>
                 </tr>
 
