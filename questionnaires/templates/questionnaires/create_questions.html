@@ -4,6 +4,50 @@
 
 {% block page_heading %}Создать тест{% endblock %}
 
+
+{% block extra_head %}
+    <script type="text/javascript">
+    $.validator.setDefaults({
+
+        errorPlacement: function(error, element) {
+            error.appendTo('#error_list_' + element.attr('id'));
+
+        }
+    });
+
+    $(document).ready(function(){
+
+
+	    // validate signup form on keyup and submit
+        $("#create_question_form").validate({
+            rules: {
+                create_id_title: "required",
+                create_id_description: "required"
+
+            },
+            messages: {
+                create_id_title: "Обязательное поле",
+                create_id_description: "Обязательное поле"
+
+            },
+            wrapper: "li",
+            highlight: function(element) {
+                $(element).parent('div').addClass("has-error");
+            },
+            unhighlight: function(element) {
+                $(element).parent('div').removeClass("has-error");
+            }
+
+        });
+
+    });
+
+
+
+    </script>
+
+{% endblock %}
+
 {% block inner_content %}
 
     <ul class="nav nav-tabs">
@@ -19,30 +63,37 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">Создать вопрос</h4>
           </div>
-          <div class="modal-body">
-                <div class="form-group ">
-                    <label class="control-label" for="id_title">Краткое название вопроса:</label>
-                   <input type="text" id="id_title" class="form-control">
+             <form action="." method="post" id="create_question_form" name="create_question_form">
+              <div class="modal-body">
 
-                </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="create_id_title">Краткое название вопроса:</label>
+                       <input type="text" id="create_id_title" name="create_id_title" class="form-control">
+                        <ul class="errorlist" id="error_list_create_id_title">
+                        </ul>
 
-                <div class="form-group ">
-                    <label class="control-label" for="id_description">Текст вопроса:</label>
+                    </div>
 
-                    <textarea class="form-control" id="id_description" rows="5"></textarea>
-                </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="create_id_description">Текст вопроса:</label>
 
-                <div class="form-group ">
-                    <label class="control-label" for="id_ord">Порядок сортировки:</label>
-                   <input type="text" id="id_ord" class="form-control">
+                        <textarea class="form-control" name="create_id_description" id="create_id_description" rows="5"></textarea>
+                         <ul class="errorlist" id="error_list_create_id_description">
+                        </ul>
+                    </div>
 
-                </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="create_id_ord">Порядок сортировки:</label>
+                       <input type="text" id="create_id_ord" name="create_id_ord" class="form-control">
 
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-            <button type="button" class="btn btn-primary">Сохранить</button>
-          </div>
+                    </div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                <input type="submit" class="btn btn-primary" value="Сохранить">
+              </div>
+         </form>
         </div>
       </div>
     </div>

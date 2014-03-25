@@ -12,6 +12,9 @@ ul.errorlist li{
     color: #a94442;
     margin-left: -40px;
 }
+ul.errorlist li label{
+   font-weight: normal;
+}
 
 /* CUSTOMIZE THE NAVBAR
 -------------------------------------------------- */
