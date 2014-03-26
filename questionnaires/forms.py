@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-from questionnaires.models import Questionnaire
+from questionnaires.models import Questionnaire, Question
 from django import forms
 
 
@@ -13,3 +13,9 @@ class QuestionnaireForm(forms.ModelForm):
         self.fields['title'] = forms.CharField(label=u"Название теста")
         self.fields['description'] = forms.CharField(label=u"Описание теста", widget=forms.Textarea, required=False)
         self.fields['is_active'] = forms.BooleanField(label=u"Опубликован", required=False)
+
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['title', 'description', 'ord']

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from questionnaires.forms import QuestionnaireForm
+from questionnaires.forms import QuestionnaireForm, QuestionForm
 from questionnaires.models import Questionnaire, Question
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404
@@ -74,5 +74,17 @@ def delete_test(request, questionnaire_id=0):
 
 @login_required
 def create_questions(request, questionnaire_id=0):
+
+    f = QuestionForm()
+
+    if request.method == 'POST':
+        questionnaire = get_object_or_404(Questionnaire, pk=questionnaire_id, author=request.user)
+        f = QuestionForm(request.POST)
+        print f.errors
+        if f.is_valid():
+            f.instance.questionnaire = questionnaire
+            f.save()
+            return redirect(reverse('create_questions', args=[questionnaire.id]))
+
     questions = Question.objects.filter(questionnaire=questionnaire_id)
-    return render(request, 'questionnaires/create_questions.html', {'questionnaire_id': questionnaire_id, 'questions': questions})
+    return render(request, 'questionnaires/create_questions.html', {'questionnaire_id': questionnaire_id, 'questions': questions, 'nform': f})
