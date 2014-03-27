@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from questionnaires.forms import QuestionnaireForm, QuestionForm
 from questionnaires.models import Questionnaire, Question
 from django.core.paginator import Paginator, EmptyPage
-from django.http import Http404
+from django.http import Http404, HttpResponse
+import json
 
 
 @login_required
@@ -73,6 +74,12 @@ def delete_test(request, questionnaire_id=0):
 
 
 @login_required
+def get_question_details(request, question_id=0):
+    question = get_object_or_404(Question, pk=question_id)
+    q = {"title": question.title, "description": question.description, "ord": question.ord}
+    return HttpResponse(json.dumps(q), content_type="application/json")
+
+@login_required
 def create_questions(request, questionnaire_id=0):
 
     f = QuestionForm()
@@ -80,7 +87,7 @@ def create_questions(request, questionnaire_id=0):
     if request.method == 'POST':
         questionnaire = get_object_or_404(Questionnaire, pk=questionnaire_id, author=request.user)
         f = QuestionForm(request.POST)
-        print f.errors
+        #print f.errors
         if f.is_valid():
             f.instance.questionnaire = questionnaire
             f.save()

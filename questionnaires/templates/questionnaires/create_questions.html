@@ -21,15 +21,22 @@
 	    // validate signup form on keyup and submit
         $("#create_question_form").validate({
             rules: {
-                title: "required",
-                description: "required",
-                ord: "required"
+                "title": {required: true},
+                "description": {required: true},
+                "ord": {
+                          required: true,
+                          digits: true
+                       }
 
             },
             messages: {
-                title: "Обязательное поле",
-                description: "Обязательное поле",
-                ord: "Обязательное поле"
+                "title": {required: "Обязательное поле"},
+                "description": {required: "Обязательное поле"},
+                "ord": {
+                          required: "Обязательное поле",
+                          digits: "Введите целое число"
+
+                      }
 
             },
             wrapper: "li",
@@ -44,6 +51,22 @@
 
     });
 
+    function createQuestion(){
+        $("#myModalLabel").html('Создать вопрос');
+        $('#createQuestionModal').modal('show');
+    }
+
+
+    function editQuestion(id){
+        $.get("/account/getquestiondetails/" + id + "/", function(data){
+
+            console.log = data;
+            $("#myModalLabel").html('Редактировать вопрос');
+            $('#createQuestionModal').modal('show');
+        });
+
+
+    }
 
 
     </script>
@@ -105,7 +128,7 @@
     </div>
 <!-- create question modal END-->
 
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#createQuestionModal" style="float: right">Создать вопрос</button>
+      <button type="button" class="btn btn-default"  style="float: right" onclick="createQuestion();">Создать вопрос</button>
     <div style="clear: both; padding:10px"></div>
         <div class="table-responsive">
         {% if questions %}
@@ -130,7 +153,7 @@
                     {{ question.ord }}
                   </td>
                   <td  align="right">
-                      <button type="button" class="btn btn-success btn-xs">Редактировать</button>
+                      <button type="button" class="btn btn-success btn-xs" onclick="editQuestion({{ question.id }});">Редактировать</button>
                       <button type="button" class="btn btn-danger btn-xs" onclick="deleteQuestion({{ question.id }}, '{{ question.title }}');">Удалить</button>
                   </td>
                 </tr>
