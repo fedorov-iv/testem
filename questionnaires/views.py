@@ -75,7 +75,7 @@ def delete_test(request, questionnaire_id=0):
 
 @login_required
 def get_question_details(request, question_id=0):
-    question = get_object_or_404(Question, pk=question_id)
+    question = get_object_or_404(Question, pk=question_id, author=request.user)
     q = {"title": question.title, "description": question.description, "ord": question.ord}
     return HttpResponse(json.dumps(q), content_type="application/json")
 
@@ -86,12 +86,27 @@ def create_questions(request, questionnaire_id=0):
 
     if request.method == 'POST':
         questionnaire = get_object_or_404(Questionnaire, pk=questionnaire_id, author=request.user)
-        f = QuestionForm(request.POST)
+
+        question = None
+
+        if request.POST.get("id"):
+            question = get_object_or_404(Question, pk=request.POST.get("id"), author=request.user)
+
+        f = QuestionForm(request.POST, instance=question)
         #print f.errors
         if f.is_valid():
             f.instance.questionnaire = questionnaire
+            f.instance.author = request.user
             f.save()
             return redirect(reverse('create_questions', args=[questionnaire.id]))
 
     questions = Question.objects.filter(questionnaire=questionnaire_id)
-    return render(request, 'questionnaires/create_questions.html', {'questionnaire_id': questionnaire_id, 'questions': questions, 'nform': f})
+    return render(request,
+                  'questionnaires/create_questions.html',
+                  {'questionnaire_id': questionnaire_id, 'questions': questions, 'nform': f})
+
+@login_required
+def delete_question(request, question_id=0):
+    question = get_object_or_404(Question, pk=question_id, author=request.user)
+    question.delete()
+    return redirect(reverse('create_questions', args=[question.questionnaire.id]))

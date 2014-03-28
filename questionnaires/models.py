@@ -29,6 +29,7 @@ class Questionnaire(models.Model):
 
 
 class Question(models.Model):
+    author = models.ForeignKey(User)
     questionnaire = models.ForeignKey(Questionnaire)
     title = models.CharField(verbose_name=u'Краткое название', max_length=1000)
     description = tinymce_models.HTMLField(verbose_name=u'Текст вопроса')
@@ -44,6 +45,7 @@ class Question(models.Model):
 
 
 class AnswerVariant(models.Model):
+    author = models.ForeignKey(User)
     question = models.ForeignKey(Question)
     title = models.CharField(verbose_name=u'Текст варианта ответа', max_length=1000, )
     is_correct = models.BooleanField(verbose_name=u'Верный ответ', default=False)

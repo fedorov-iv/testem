@@ -53,6 +53,9 @@
 
     function createQuestion(){
         $("#myModalLabel").html('Создать вопрос');
+        $("#id_title").val('');
+        $("#id_description").val('');
+        $("#id_ord").val('');
         $('#createQuestionModal').modal('show');
     }
 
@@ -60,13 +63,36 @@
     function editQuestion(id){
         $.get("/account/getquestiondetails/" + id + "/", function(data){
 
-            console.log = data;
+
             $("#myModalLabel").html('Редактировать вопрос');
+            $("#id_id").val(id);
+            $("#id_title").val(data.title);
+            $("#id_description").val(data.description);
+            $("#id_ord").val(data.ord);
             $('#createQuestionModal').modal('show');
         });
 
 
     }
+
+     function deleteQuestion(id, objname){
+
+            $('#delbtn').unbind('click');
+            $('#objname').html(objname);
+            $("#delbtn").click(function(){
+                //alert(id);
+                window.location.href='{% url 'delete_question' %}'+ id +'/'
+            });
+            $(".alert").show();
+     }
+
+     function closeAlert(){
+           $('#delbtn').unbind('click');
+           $('#objname').html('');
+           $(".alert").hide();
+     }
+
+
 
 
     </script>
@@ -80,6 +106,19 @@
       <li class="active"><a href="{% url "create_questions" %}{% if questionnaire_id %}{{ questionnaire_id }}/{% endif %}">Вопросы</a></li>
     </ul>
 
+     <!-- alert -->
+
+    <div class="alert alert-danger fade in" style="display: none">
+      <button type="button" class="close" aria-hidden="true" onclick="closeAlert();">&times;</button>
+      <h4>Внимание!</h4>
+      <p>Вы действительно хотите удалить объект <span id="objname" style="font-weight: bold"></span>?</p>
+      <p>
+        <button type="button" class="btn btn-danger" id="delbtn">Удалить</button>
+        <button type="button" class="btn btn-default" onclick="closeAlert();">Отменить</button>
+      </p>
+    </div>
+  <!-- alert END -->
+
 <!-- create question modal-->
     <div class="modal fade" id="createQuestionModal" tabindex="-1" role="dialog" aria-labelledby="createQuestionModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -91,7 +130,7 @@
              <form action="." method="post" id="create_question_form" name="create_question_form">
               <div class="modal-body">
 
-
+                    <input type="hidden" id="id_id" name="id" value=""/>
                     <div class="form-group ">
                         <label class="control-label" for="id_title">Краткое название вопроса:</label>
                         {{ nform.title|addcss:"form-control" }}
@@ -136,7 +175,7 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th style="width: 40%">Текст вопроса</th>
+                  <th style="width: 40%">Краткое название вопроса</th>
 
 
                   <th>Порядок сортировки</th>
