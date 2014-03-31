@@ -2,10 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from questionnaires.forms import QuestionnaireForm, QuestionForm
-from questionnaires.models import Questionnaire, Question
+from questionnaires.models import Questionnaire, Question, AnswerVariant
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404, HttpResponse
 import json
+from django.core import serializers
 
 
 @login_required
@@ -75,9 +76,12 @@ def delete_test(request, questionnaire_id=0):
 
 @login_required
 def get_question_details(request, question_id=0):
+
     question = get_object_or_404(Question, pk=question_id, author=request.user)
-    q = {"title": question.title, "description": question.description, "ord": question.ord}
-    return HttpResponse(json.dumps(q), content_type="application/json")
+    answer_variants = question.answervariant_set.all()
+    merged_data = list([question]) + list(answer_variants)
+    return HttpResponse(serializers.serialize('json', merged_data, indent=5), content_type="application/json")
+
 
 @login_required
 def create_questions(request, questionnaire_id=0):

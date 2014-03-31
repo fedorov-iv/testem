@@ -16,6 +16,10 @@ ul.errorlist li label{
    font-weight: normal;
 }
 
+div.form-group div{
+    padding-bottom: 10px;
+}
+
 /* CUSTOMIZE THE NAVBAR
 -------------------------------------------------- */
 

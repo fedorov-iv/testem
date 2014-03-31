@@ -56,6 +56,8 @@
         $("#id_title").val('');
         $("#id_description").val('');
         $("#id_ord").val('');
+        $("#answers_block").empty();
+        $('#answers_tabs a:first').tab('show');
         $('#createQuestionModal').modal('show');
     }
 
@@ -63,12 +65,26 @@
     function editQuestion(id){
         $.get("/account/getquestiondetails/" + id + "/", function(data){
 
-
+            //alert(data)
             $("#myModalLabel").html('Редактировать вопрос');
             $("#id_id").val(id);
-            $("#id_title").val(data.title);
-            $("#id_description").val(data.description);
-            $("#id_ord").val(data.ord);
+            $("#id_title").val(data[0].fields.title);
+            $("#id_description").val(data[0].fields.description);
+            $("#id_ord").val(data[0].fields.ord);
+
+            $("#answers_block").empty();
+
+            var all_answers = '';
+
+            //set answers fields
+            for(var i = 1; i < data.length; i++){
+                all_answers += '<div class="form-group well well-sm"><div><textarea type="text" class="form-control" placeholder="' + data[i].fields.title + '"></textarea> </div><div><input type="text"  class="form-control"  placeholder="' + data[i].fields.weight + '"/></div><div><input  type="checkbox" checked="' + data[i].fields.is_correct +'" value="1"/> Является верным </div></div>';
+
+            }
+
+            $("#answers_block").append(all_answers);
+
+            $('#answers_tabs a:first').tab('show');
             $('#createQuestionModal').modal('show');
         });
 
@@ -130,6 +146,13 @@
              <form action="." method="post" id="create_question_form" name="create_question_form">
               <div class="modal-body">
 
+                  <ul class="nav nav-tabs" id="answers_tabs">
+                      <li class="active"><a href="#main_tab" data-toggle="tab">Основное</a></li>
+                      <li><a href="#answer_variants_tab" data-toggle="tab">Варианты ответа</a></li>
+
+                    </ul>
+                    <div class="tab-content">
+                    <div class="tab-pane active" id="main_tab">
                     <input type="hidden" id="id_id" name="id" value=""/>
                     <div class="form-group ">
                         <label class="control-label" for="id_title">Краткое название вопроса:</label>
@@ -154,8 +177,24 @@
                         </ul>
 
                     </div>
+                    </div>
+                    <div class="tab-pane" id="answer_variants_tab">.
 
+                    <div id="answers_block"></div>
+                   <!--<div class="form-group" style="border-bottom: 1px solid #ccc">
+                       <div><input type="text" class="form-control" placeholder="Текст ответа"/> </div>
+                       <div><input type="text"  class="form-control"  placeholder="Вес ответа"/> </div>
+                       <div><input  type="checkbox"/> Является верным </div>
+
+                   </div>-->
+                         <button type="submit" class="btn btn-default">Добавить вариант ответа</button>
+                   </div>
+
+                </div>
               </div>
+
+
+
               <div class="modal-footer">
                    {% csrf_token %}
                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
