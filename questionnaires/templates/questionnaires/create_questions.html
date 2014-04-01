@@ -78,7 +78,8 @@
 
             //set answers fields
             for(var i = 1; i < data.length; i++){
-                all_answers += '<div class="form-group well well-sm"><div><textarea type="text" class="form-control" placeholder="' + data[i].fields.title + '"></textarea> </div><div><input type="text"  class="form-control"  placeholder="' + data[i].fields.weight + '"/></div><div><input  type="checkbox" checked="' + data[i].fields.is_correct +'" value="1"/> Является верным </div></div>';
+                var checked = (data[i].fields.is_correct) ? 'checked="true"' : '' ;
+                all_answers += '<div class="form-group well well-sm"><div><textarea type="text" class="form-control" placeholder="' + data[i].fields.title + '"></textarea> </div><div><input type="text"  class="form-control"  placeholder="' + data[i].fields.weight + '"/></div><div><input  type="checkbox" ' + checked +' value="1"/> Является верным </div></div>';
 
             }
 
