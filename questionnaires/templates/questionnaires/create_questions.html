@@ -63,7 +63,7 @@
 
 
     function editQuestion(id){
-        $.get("/account/getquestiondetails/" + id + "/", function(data){
+        $.get("/mytests/getquestiondetails/" + id + "/", function(data){
 
             //alert(data)
             $("#myModalLabel").html('Редактировать вопрос');
@@ -217,7 +217,7 @@
                   <th>#</th>
                   <th style="width: 40%">Краткое название вопроса</th>
 
-
+                  <th>Вариантов ответа</th>
                   <th>Порядок сортировки</th>
                   <th style="text-align: right">Действия</th>
                 </tr>
@@ -227,7 +227,7 @@
                 <tr>
                   <td>{{ question.id }}</td>
                   <td>{{ question.title }}</td>
-
+                  <td><span class="badge">{{ question.objects_count }}</span></td>
                   <td>
                     {{ question.ord }}
                   </td>

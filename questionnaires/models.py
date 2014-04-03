@@ -38,6 +38,9 @@ class Question(models.Model):
     def __unicode__(self):
         return self.title
 
+    def objects_count(self):
+        return AnswerVariant.objects.filter(question=self.pk).count()
+
     class Meta:
         verbose_name = u'вопрос теста'
         verbose_name_plural = u'вопросы теста'
