@@ -11,7 +11,6 @@ from django.core import serializers
 
 @login_required
 def index(request, page=1):
-
     tests = Questionnaire.objects.filter(author=request.user)
 
     per_page = 5
@@ -22,19 +21,18 @@ def index(request, page=1):
         raise Http404()
 
     return render(request,
-        'questionnaires/index.html',
-        {
+                  'questionnaires/index.html',
+                  {
 
-            'tests': curr_page_tests,
-            'pages': page_object.page_range,
-            'active_page': int(page),
-            'pages_count':  page_object.num_pages
-        })
+                      'tests': curr_page_tests,
+                      'pages': page_object.page_range,
+                      'active_page': int(page),
+                      'pages_count': page_object.num_pages
+                  })
 
 
 @login_required
 def create_test(request, questionnaire_id=0):
-
     questionnaire = None
 
     if questionnaire_id:
@@ -76,7 +74,6 @@ def delete_test(request, questionnaire_id=0):
 
 @login_required
 def get_question_details(request, question_id=0):
-
     question = get_object_or_404(Question, pk=question_id, author=request.user)
     answer_variants = question.answervariant_set.all()
     merged_data = list([question]) + list(answer_variants)
@@ -85,7 +82,6 @@ def get_question_details(request, question_id=0):
 
 @login_required
 def create_questions(request, questionnaire_id=0):
-
     f = QuestionForm()
 
     if request.method == 'POST':
@@ -97,17 +93,54 @@ def create_questions(request, questionnaire_id=0):
             question = get_object_or_404(Question, pk=request.POST.get("id"), author=request.user)
 
         f = QuestionForm(request.POST, instance=question)
-        #print f.errors
+
+        #print request.POST.getlist('q_id')
+
         if f.is_valid():
             f.instance.questionnaire = questionnaire
             f.instance.author = request.user
             f.save()
+            # saving existing answer variants' values
+            if request.POST.get('q_id'):
+                for question_id in request.POST.getlist('q_id'):
+
+                    av = get_object_or_404(AnswerVariant, pk=question_id, author=request.user, question=f.instance)
+                    # if title of answer variant is absent - delete answer variant
+                    if not request.POST.get('q_title_' + question_id):
+                        av.delete()
+                        continue
+                    #av.question = f.instance
+                    #av.author = request.user
+                    av.title = request.POST.get('q_title_' + question_id)
+                    av.weight = request.POST.get('q_weight_' + question_id) if request.POST.get(
+                        'q_weight_' + question_id) else 0
+                    av.is_correct = True if request.POST.get('q_is_correct_' + question_id) else False
+                    av.save()
+
+            # saving new answer variants' values
+            if request.POST.get('nq_id'):
+                for question_id in request.POST.getlist('nq_id'):
+
+                    # if title of answer variant is absent - delete answer variant
+                    if not request.POST.get('nq_title_' + question_id):
+                        continue
+                    av = AnswerVariant()
+                    av.question = f.instance
+                    av.author = request.user
+                    av.title = request.POST.get('nq_title_' + question_id)
+                    av.weight = request.POST.get('nq_weight_' + question_id) if request.POST.get(
+                        'nq_weight_' + question_id) else 0
+                    av.is_correct = True if request.POST.get('nq_is_correct_' + question_id) else False
+                    av.save()
+
+
             return redirect(reverse('create_questions', args=[questionnaire.id]))
 
     questions = Question.objects.filter(questionnaire=questionnaire_id)
     return render(request,
                   'questionnaires/create_questions.html',
                   {'questionnaire_id': questionnaire_id, 'questions': questions, 'nform': f})
+
 
 @login_required
 def delete_question(request, question_id=0):

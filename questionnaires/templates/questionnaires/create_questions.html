@@ -79,7 +79,7 @@
             //set answers fields
             for(var i = 1; i < data.length; i++){
                 var checked = (data[i].fields.is_correct) ? 'checked="true"' : '' ;
-                all_answers += '<div class="form-group well well-sm"><div><textarea type="text" class="form-control" placeholder="' + data[i].fields.title + '"></textarea> </div><div><input type="text"  class="form-control"  placeholder="' + data[i].fields.weight + '"/></div><div><input  type="checkbox" ' + checked +' value="1"/> Является верным </div></div>';
+                all_answers += '<div class="form-group well well-sm"><div><input type="hidden" name="q_id" value="' + data[i].pk + '"/><label class="control-label">Вариант ответа:</label><textarea type="text" name="q_title_'+data[i].pk+'" class="form-control">' + data[i].fields.title + '</textarea> </div><div><label class="control-label">Вес:</label><input type="text" name="q_weight_'+data[i].pk+'" value="' + data[i].fields.weight + '"  class="form-control"/></div><div><input name="q_is_correct_'+data[i].pk+'"  type="checkbox" ' + checked +' value="1"/> Является верным </div></div>';
 
             }
 
@@ -102,6 +102,24 @@
             });
             $(".alert").show();
      }
+
+
+    var new_answer_cnt = 0;
+
+    function createAnswer(){
+
+        answer_div = '<div class="form-group well well-sm"><button class="close" onclick="deleteAnswer(this);" type="button" aria-hidden="true">&times;</button><div><input type="hidden" name="nq_id" value="' + new_answer_cnt + '"/><label class="control-label">Вариант ответа:</label><textarea type="text" name="nq_title_'+new_answer_cnt+'" class="form-control"></textarea> </div><div><label class="control-label">Вec:</label><input type="text" name="nq_weight_'+ new_answer_cnt +'"class="form-control" value="0"/></div><div><input  type="checkbox" name="nq_is_correct_' + new_answer_cnt + '"  value="1"/> Является верным </div></div>';
+        $("#answers_block").append(answer_div);
+        new_answer_cnt++;
+    }
+
+    function deleteAnswer(obj){
+        var div_to_remove = obj.parentNode;
+         div_to_remove.parentNode.removeChild(div_to_remove);
+        //alert(obj.parentNode.nodeName);
+    }
+
+
 
      function closeAlert(){
            $('#delbtn').unbind('click');
@@ -188,7 +206,7 @@
                        <div><input  type="checkbox"/> Является верным </div>
 
                    </div>-->
-                         <button type="submit" class="btn btn-default">Добавить вариант ответа</button>
+                         <button type="button" class="btn btn-default" onclick="createAnswer();">Добавить вариант ответа</button>
                    </div>
 
                 </div>
