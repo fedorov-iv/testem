@@ -105,8 +105,8 @@ def create_questions(request, questionnaire_id=0):
                 for question_id in request.POST.getlist('q_id'):
 
                     av = get_object_or_404(AnswerVariant, pk=question_id, author=request.user, question=f.instance)
-                    # if title of answer variant is absent - delete answer variant
-                    if not request.POST.get('q_title_' + question_id):
+                    # if delete checkbox is set - delete answer variant
+                    if request.POST.get('q_delete_' + question_id):
                         av.delete()
                         continue
                     #av.question = f.instance

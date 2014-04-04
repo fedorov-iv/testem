@@ -20,6 +20,7 @@
 
 	    // validate signup form on keyup and submit
         $("#create_question_form").validate({
+            ignore: "", // проверяем все поля, а не только видимые
             rules: {
                 "title": {required: true},
                 "description": {required: true},
@@ -45,7 +46,13 @@
             },
             unhighlight: function(element) {
                 $(element).parent('div').removeClass("has-error");
+            },
+            invalidHandler: function(event, validator) {
+                var errors = validator.numberOfInvalids();
+                if(errors)
+                    $('#answers_tabs a:first').tab('show');
             }
+
 
         });
 
@@ -79,11 +86,18 @@
             //set answers fields
             for(var i = 1; i < data.length; i++){
                 var checked = (data[i].fields.is_correct) ? 'checked="true"' : '' ;
-                all_answers += '<div class="form-group well well-sm"><div><input type="hidden" name="q_id" value="' + data[i].pk + '"/><label class="control-label">Вариант ответа:</label><textarea type="text" name="q_title_'+data[i].pk+'" class="form-control">' + data[i].fields.title + '</textarea> </div><div><label class="control-label">Вес:</label><input type="text" name="q_weight_'+data[i].pk+'" value="' + data[i].fields.weight + '"  class="form-control"/></div><div><input name="q_is_correct_'+data[i].pk+'"  type="checkbox" ' + checked +' value="1"/> Является верным </div></div>';
+                all_answers += '<div class="form-group well well-sm"><label style="float:right; font-weight:normal" for="q_delete_'+ data[i].pk +'">Удалить <input type="checkbox" value="1" id="q_delete_' + data[i].pk + '" name="q_delete_' + data[i].pk + '"/></label><div><input type="hidden" name="q_id" value="' + data[i].pk + '"/><label class="control-label">Вариант ответа:</label><textarea type="text" name="q_title_'+data[i].pk+'" class="form-control">' + data[i].fields.title + '</textarea> </div><div><label class="control-label">Вес:</label><input type="text" name="q_weight_'+data[i].pk+'" value="' + data[i].fields.weight + '"  class="form-control"/></div><div><input name="q_is_correct_'+data[i].pk+'"  type="checkbox" ' + checked +' value="1"/> Является верным </div></div>';
 
             }
 
+           if(all_answers)
+                $("#no_answer_variants").addClass('hide');
+           else
+                $("#no_answer_variants").removeClass('hide');
+
+
             $("#answers_block").append(all_answers);
+
 
             $('#answers_tabs a:first').tab('show');
             $('#createQuestionModal').modal('show');
@@ -110,12 +124,19 @@
 
         answer_div = '<div class="form-group well well-sm"><button class="close" onclick="deleteAnswer(this);" type="button" aria-hidden="true">&times;</button><div><input type="hidden" name="nq_id" value="' + new_answer_cnt + '"/><label class="control-label">Вариант ответа:</label><textarea type="text" name="nq_title_'+new_answer_cnt+'" class="form-control"></textarea> </div><div><label class="control-label">Вec:</label><input type="text" name="nq_weight_'+ new_answer_cnt +'"class="form-control" value="0"/></div><div><input  type="checkbox" name="nq_is_correct_' + new_answer_cnt + '"  value="1"/> Является верным </div></div>';
         $("#answers_block").append(answer_div);
+
+        if($("#answers_block").html())
+            $("#no_answer_variants").addClass('hide');
+
         new_answer_cnt++;
     }
 
     function deleteAnswer(obj){
         var div_to_remove = obj.parentNode;
          div_to_remove.parentNode.removeChild(div_to_remove);
+
+        if (!$("#answers_block").html())
+            $("#no_answer_variants").removeClass('hide');
         //alert(obj.parentNode.nodeName);
     }
 
@@ -197,7 +218,10 @@
 
                     </div>
                     </div>
-                    <div class="tab-pane" id="answer_variants_tab">.
+                    <div class="tab-pane" id="answer_variants_tab">
+                         <div class="alert alert-info" id="no_answer_variants">
+                            <p>В этом вопросе еще нет вариантов ответов</p>
+                        </div>
 
                     <div id="answers_block"></div>
                    <!--<div class="form-group" style="border-bottom: 1px solid #ccc">
