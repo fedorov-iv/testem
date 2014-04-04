@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     url(r'^registration/', include('registration.urls')),
     url(r'^mytests/', include('questionnaires.urls')),
     url(r'^mymaterials/', include('materials.urls')),
+    url(r'^feedback/', include('feedback.urls')),
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),

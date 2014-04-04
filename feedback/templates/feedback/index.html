@@ -1,0 +1,66 @@
+{% extends "inner.html" %}
+{% load project_tags %}
+{% block title %}Регистрация{% endblock %}
+
+{% block page_heading %}Регистрация{% endblock %}
+
+{% block inner_content %}
+
+
+{% if success %}
+    <div class="alert alert-success">
+        <p>Вы успешно зарегистрировались!</p>
+    </div>
+{% else %}
+
+<form action="." method="post">{% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="form-group {% if form.first_name.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_first_name">Имя:</label>
+            {{ form.first_name|addcss:"form-control" }}
+
+        </div>
+        {{ form.first_name.errors }}
+
+        <div class="form-group {% if form.last_name.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_last_name">Фамилия:</label>
+            {{ form.last_name|addcss:"form-control" }}
+
+        </div>
+        {{ form.last_name.errors }}
+
+        <div class="form-group {% if form.email.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_last_name">E-mail:</label>
+            {{ form.email|addcss:"form-control" }}
+
+        </div>
+        {{ form.email.errors }}
+
+        <div class="form-group {% if form.username.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_username">Логин:</label>
+            {{ form.username|addcss:"form-control" }}
+
+        </div>
+        {{ form.username.errors }}
+        <div class="form-group {% if form.password.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_password">Пароль:</label>
+            {{ form.password|addcss:"form-control" }}
+
+        </div>
+        {{ form.password.errors }}
+
+
+    {% csrf_token %}
+    <input type="submit" value="Отправить" class="btn btn-default">
+    </form>
+
+{% endif %}
+
+
+
+{% endblock %}

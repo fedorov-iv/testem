@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'mailtemplates',
     'registration',
     'questionnaires',
+    'feedback',
 )
 
 MIDDLEWARE_CLASSES = (
