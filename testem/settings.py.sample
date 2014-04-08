@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'registration',
     'questionnaires',
     'feedback',
+    'captcha',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -122,6 +123,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
+    'django.contrib.messages.context_processors.messages',
 )
 
 # Additional locations of static files
