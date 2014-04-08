@@ -22,4 +22,4 @@ class FeedbackForm(forms.ModelForm):
             elif self.cleaned_data.get('author_email'):
                 return self.cleaned_data.get('author_email')
             else:
-                raise forms.ValidationError("Обязательное поле.")
+                raise forms.ValidationError("Это поле обязательно для заполнения.")

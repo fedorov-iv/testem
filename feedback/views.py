@@ -7,16 +7,14 @@ from django.contrib import messages
 
 
 def index(request):
-    success = False
 
     if request.method == 'POST':
 
-        #user = request.user if request.user else None
         f = FeedbackForm(user=request.user, data=request.POST)
         if f.is_valid():
-            success = True
 
-            #print f.cleaned_data
+            if request.user.is_authenticated():
+                f.instance.user = request.user
 
             f.save()
 
@@ -44,4 +42,4 @@ def index(request):
     else:
         f = FeedbackForm()
 
-    return render(request, 'feedback/index.html', {'form': f, 'success': success})
+    return render(request, 'feedback/index.html', {'form': f})
