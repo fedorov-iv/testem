@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from feedback.forms import FeedbackForm
 from mailtemplates.models import MailTemplate
 from django.core.mail import EmailMessage
+from django.contrib import messages
 
 
 def index(request):
@@ -23,8 +24,8 @@ def index(request):
             mail_template = MailTemplate.objects.get(code__exact='USERFEEDBACK')
             body = mail_template.body.replace('###hostname###', request.get_host())
             body = body.replace('###author_email###', f.instance.author_email)
-            body = body.replace('###subject###', request.POST.get('subject'))
-            body = body.replace('###body###', request.POST.get('body'))
+            body = body.replace('###subject###', f.instance.subject)
+            body = body.replace('###body###', f.instance.body)
 
             email = EmailMessage(
                 mail_template.subject,
@@ -37,10 +38,10 @@ def index(request):
 
             email.content_subtype = "html"
             email.send()
+            messages.add_message(request, messages.SUCCESS, "Сообщение успешно отправлено!")
             return redirect('feedback_index')
 
     else:
         f = FeedbackForm()
 
-    context = {'form': f, 'success': success}
-    return render(request, 'feedback/index.html', context)
+    return render(request, 'feedback/index.html', {'form': f, 'success': success})

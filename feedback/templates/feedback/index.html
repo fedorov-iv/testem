@@ -7,48 +7,53 @@
 {% block inner_content %}
 
 
-{% if success %}
-    <div class="alert alert-success">
-        <p>Вы успешно зарегистрировались!</p>
-    </div>
-{% else %}
-
-<form action="." method="post">{% csrf_token %}
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger">
-                {{ form.non_field_errors }}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">
+                <p>{{ message }}</p>
             </div>
-        {% endif %}
-
-        <div class="form-group {% if form.subject.errors %}has-error{% endif %}">
-            <label class="control-label" for="id_subject">Тема:</label>
-            {{ form.subject|addcss:"form-control" }}
-
-        </div>
-        {{ form.subject.errors }}
-
-        <div class="form-group {% if form.author_email.errors %}has-error{% endif %}">
-            <label class="control-label" for="id_author_email">E-mail:</label>
-            {{ form.author_email|addcss:"form-control" }}
-
-        </div>
-        {{ form.author_email.errors }}
-
-        <div class="form-group {% if form.body.errors %}has-error{% endif %}">
-            <label class="control-label" for="id_body">Сообщение:</label>
-            {{ form.body|addcss:"form-control" }}
-
-        </div>
-        {{ form.body.errors }}
+        {% endfor %}
+    {% else %}
 
 
+        <form action="." method="post">
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
 
+            <div class="form-group {% if form.subject.errors %}has-error{% endif %}">
+                <label class="control-label" for="id_subject">Тема:</label>
+                {{ form.subject|addcss:"form-control" }}
 
-    {% csrf_token %}
-    <input type="submit" value="Отправить" class="btn btn-default">
-    </form>
+            </div>
+            {{ form.subject.errors }}
+            {% if not user.is_authenticated %}
+                <div class="form-group {% if form.author_email.errors %}has-error{% endif %}">
+                    <label class="control-label" for="id_author_email">E-mail:</label>
+                    {{ form.author_email|addcss:"form-control" }}
 
-{% endif %}
+                </div>
+                {{ form.author_email.errors }}
+            {% endif %}
+
+            <div class="form-group {% if form.body.errors %}has-error{% endif %}">
+                <label class="control-label" for="id_body">Сообщение:</label>
+                {{ form.body|addcss:"form-control" }}
+
+            </div>
+            {{ form.body.errors }}
+            <div class="form-group {% if form.captcha.errors %}has-error{% endif %}">
+                <label class="control-label" for="id_captcha">Введите символы с картинки:</label>
+                    {{ form.captcha }}
+            </div>
+            {{ form.captcha.errors }}
+            {% csrf_token %}
+            <input type="submit" value="Отправить" class="btn btn-default">
+        </form>
+
+    {% endif %}
 
 
 

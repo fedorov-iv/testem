@@ -1,10 +1,13 @@
 # -*- coding: utf8 -*-
 from feedback.models import Feedback
 from django import forms
-from django.contrib.auth. models import User
+from captcha.fields import CaptchaField
 
 
 class FeedbackForm(forms.ModelForm):
+
+        captcha = CaptchaField()
+
         class Meta:
             model = Feedback
             fields = ['subject', 'body', 'author_email']
@@ -14,10 +17,9 @@ class FeedbackForm(forms.ModelForm):
             self._user = user
 
         def clean_author_email(self):
-            if self._user.email:
-                #user = User.objects.get(username=self._user)
+            if self._user.is_authenticated():
                 return self._user.email
             elif self.cleaned_data.get('author_email'):
                 return self.cleaned_data.get('author_email')
             else:
-                raise forms.ValidationError("Обязательное поле")
+                raise forms.ValidationError("Обязательное поле.")

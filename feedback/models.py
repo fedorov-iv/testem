@@ -10,3 +10,7 @@ class Feedback(models.Model):
     user = models.ForeignKey(User, default=None, blank=True, null=True)
     body = models.TextField(verbose_name=u'Сообщение')
     create_date = models.DateTimeField(verbose_name=u'Дата создания', default=datetime.datetime.now())
+
+    class Meta:
+        verbose_name = u'сообщение обратной связи'
+        verbose_name_plural = u'сообщения обратной связи'

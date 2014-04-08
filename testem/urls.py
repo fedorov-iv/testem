@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^mytests/', include('questionnaires.urls')),
     url(r'^mymaterials/', include('materials.urls')),
     url(r'^feedback/', include('feedback.urls')),
+    url(r'^captcha/', include('captcha.urls')),
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
