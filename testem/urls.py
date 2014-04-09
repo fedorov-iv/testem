@@ -13,6 +13,8 @@ urlpatterns = patterns('',
     url(r'^feedback/', include('feedback.urls')),
     url(r'^captcha/', include('captcha.urls')),
     # url(r'^blog/', include('blog.urls')),
+    url(r'^tests/$', 'questionnaires.views.questionnaires_list', name='questionnaires_list'),
+    url(r'^tests/page/(?P<page>[1-9]\d*)/$', 'questionnaires.views.questionnaires_list'),
 
     url(r'^admin/', include(admin.site.urls)),
 )

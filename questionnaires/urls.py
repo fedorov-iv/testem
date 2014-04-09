@@ -4,6 +4,7 @@ from questionnaires import views
 
 urlpatterns = patterns('',
 
+    #  административные
     url(r'^$', views.index, name='account'),
     url(r'^page/(?P<page>[1-9]\d*)/$', views.index),
     url(r'^createtest/$', views.create_test, name='create_test'),
@@ -14,6 +15,6 @@ urlpatterns = patterns('',
     url(r'^createquestions/(?P<questionnaire_id>[1-9]\d*)/$', views.create_questions, name='create_questions'),
     url(r'^getquestiondetails/(?P<question_id>[1-9]\d*)/$', views.get_question_details, name='get_question_details'),
     url(r'^deletequestion/$', views.delete_question, name='delete_question'),
-    url(r'^deletequestion/(?P<question_id>[1-9]\d*)/$', views.delete_question, name='delete_question')
+    url(r'^deletequestion/(?P<question_id>[1-9]\d*)/$', views.delete_question, name='delete_question'),
 
 )

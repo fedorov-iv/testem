@@ -1,0 +1,71 @@
+{% extends "inner.html" %}
+{% load project_tags %}
+{% block title %}Тесты{% endblock %}
+{% block extra_head %}
+
+{% endblock %}
+
+{% block page_heading %}Тесты{% endblock %}
+
+{% block inner_content %}
+
+        <div class="table-responsive">
+        {% if tests %}
+            <table class="table table-hover">
+              <thead>
+                <tr>
+
+                  <th style="width: 40%">Название теста</th>
+                  <th>Автор</th>
+                  <th>Вопросов</th>
+                  <th>Дата создания</th>
+
+
+                </tr>
+              </thead>
+              <tbody>
+              {% for test in tests %}
+                <tr>
+
+                  <td>{{ test.title }}</td>
+                   <td>{{ test.author }}</td>
+                  <td><span class="badge">{{ test.objects_count }}</span></td>
+                 <td>{{ test.create_date }}</td>
+
+                </tr>
+
+              {% endfor %}
+              </tbody>
+            </table>
+         {% else  %}
+            <div class="alert alert-info">
+                <p>В базе еще нет ни одного теста</p>
+            </div>
+         {% endif %}
+          </div>
+    <ul class="pagination">
+    {% if active_page == 1 %}
+        <li class="disabled"><span>&laquo;</span></li>
+    {% else %}
+        <li ><a  href="{% url "questionnaires_list" %}page/{{ active_page|add:"-1" }}/"><span>&laquo;</span></a></li>
+    {% endif %}
+
+
+     {% for page in pages %}
+        {% if page == active_page %}
+             <li class="active"><span>{{ page }}<span class="sr-only">(current)</span></span></li>
+
+        {% else %}
+             <li ><a href="{% url "questionnaires_list" %}page/{{ page }}"><span>{{ page }}</span></a></li>
+
+        {% endif %}
+    {% endfor %}
+    {% if active_page == pages_count %}
+        <li class="disabled"><span>&raquo;</span></li>
+    {% else %}
+        <li ><a  href="{% url "questionnaires_list" %}page/{{ active_page|add:"1" }}/"><span>&raquo;</span></a></li>
+    {% endif %}
+
+    </ul>
+
+{% endblock %}

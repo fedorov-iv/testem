@@ -6,11 +6,11 @@ from questionnaires.forms import QuestionnaireForm, QuestionForm
 from questionnaires.models import Questionnaire, Question, AnswerVariant
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404, HttpResponse
-import json
 from django.core import serializers
 from django.contrib import messages
 
 
+#  список "моих" тестов
 @login_required
 def index(request, page=1):
     tests = Questionnaire.objects.filter(author=request.user)
@@ -33,6 +33,7 @@ def index(request, page=1):
                   })
 
 
+#  создание теста
 @login_required
 def create_test(request, questionnaire_id=0):
     questionnaire = None
@@ -69,6 +70,7 @@ def create_test(request, questionnaire_id=0):
     return render(request, 'questionnaires/create_test.html', {'form': f})
 
 
+#  удаление теста
 @login_required
 def delete_test(request, questionnaire_id=0):
     questionnaire = get_object_or_404(Questionnaire, pk=questionnaire_id, author=request.user)
@@ -76,6 +78,7 @@ def delete_test(request, questionnaire_id=0):
     return redirect(reverse("account"))
 
 
+#  получение деталей вопроса "моего" теста
 @login_required
 def get_question_details(request, question_id=0):
     question = get_object_or_404(Question, pk=question_id, author=request.user)
@@ -84,6 +87,7 @@ def get_question_details(request, question_id=0):
     return HttpResponse(serializers.serialize('json', merged_data, indent=5), content_type="application/json")
 
 
+#  создание вопросов "моего" теста
 @login_required
 def create_questions(request, questionnaire_id=0):
     f = QuestionForm()
@@ -146,8 +150,31 @@ def create_questions(request, questionnaire_id=0):
                   {'questionnaire_id': questionnaire_id, 'questions': questions, 'nform': f})
 
 
+#  удаление вопроса "моего" теста
 @login_required
 def delete_question(request, question_id=0):
     question = get_object_or_404(Question, pk=question_id, author=request.user)
     question.delete()
     return redirect(reverse('create_questions', args=[question.questionnaire.id]))
+
+
+#  список тестов для заполнения
+def questionnaires_list(request, page=1):
+    tests = Questionnaire.objects.filter(is_active=True).order_by("-create_date")
+
+    per_page = 5
+    page_object = Paginator(tests, per_page)
+    try:
+        curr_page_tests = page_object.page(page)
+    except EmptyPage:
+        raise Http404()
+
+    return render(request,
+                  'questionnaires/list.html',
+                  {
+
+                      'tests': curr_page_tests,
+                      'pages': page_object.page_range,
+                      'active_page': int(page),
+                      'pages_count': page_object.num_pages
+                  })
