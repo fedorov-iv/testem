@@ -46,6 +46,15 @@
         <button type="button" class="btn btn-default" onclick="closeAlert();">Отменить</button>
       </p>
     </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">
+                <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
   <!-- alert END -->
     <button type="button" class="btn btn-default" onclick="window.location.href='{% url 'create_test' %}'" style="float: right">Создать тест</button>
     <div style="clear: both; padding:10px"></div>

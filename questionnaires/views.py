@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
@@ -7,6 +8,7 @@ from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404, HttpResponse
 import json
 from django.core import serializers
+from django.contrib import messages
 
 
 @login_required
@@ -49,6 +51,8 @@ def create_test(request, questionnaire_id=0):
 
             f.instance.author = request.user
             f.save()
+
+            messages.add_message(request, messages.SUCCESS, "Изменения успешно сохранены!")
 
             if request.POST.get('save'):
                 return redirect(reverse("create_test", args=[f.instance.id]))
@@ -133,7 +137,7 @@ def create_questions(request, questionnaire_id=0):
                     av.is_correct = True if request.POST.get('nq_is_correct_' + question_id) else False
                     av.save()
 
-
+            messages.add_message(request, messages.SUCCESS, "Изменения успешно сохранены!")
             return redirect(reverse('create_questions', args=[questionnaire.id]))
 
     questions = Question.objects.filter(questionnaire=questionnaire_id)

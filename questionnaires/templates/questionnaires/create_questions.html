@@ -175,6 +175,14 @@
     </div>
   <!-- alert END -->
 
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">
+                <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
 <!-- create question modal-->
     <div class="modal fade" id="createQuestionModal" tabindex="-1" role="dialog" aria-labelledby="createQuestionModalLabel" aria-hidden="true">
       <div class="modal-dialog">
