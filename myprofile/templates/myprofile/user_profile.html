@@ -2,13 +2,135 @@
 {% load project_tags %}
 {% block title %}Мой профиль{% endblock %}
 {% block extra_head %}
+<script type="text/javascript">
 
+ $.validator.setDefaults({
+
+        errorPlacement: function(error, element) {
+            error.appendTo('#error_list_' + element.attr('id'));
+
+        }
+    });
+
+ $(document).ready(function(){
+     $("#change_password_form").validate({
+
+        rules: {
+
+
+            password: {
+                            required: true,
+                            minlength: 5
+            },
+            password_repeat: {
+                            required: true,
+                            minlength: 5,
+                            equalTo: "#id_password"
+            },
+            wrapper: "li",
+            highlight: function(element) {
+                $(element).parent('div').addClass("has-error");
+            },
+            unhighlight: function(element) {
+                $(element).parent('div').removeClass("has-error");
+            }
+
+        }
+
+    });
+ });
+
+</script>
 {% endblock %}
 
 {% block page_heading %}Мой профиль{% endblock %}
 
 {% block inner_content %}
 
-       ыы
+      {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">
+                <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    <!-- change password modal-->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Смена пароля</h4>
+          </div>
+             <form action="." method="post" id="change_password_form" name="change_password_form">
+              <div class="modal-body">
+
+                <div class="form-group ">
+                        <label class="control-label" for="id_password">Новый пароль:</label>
+                        <input class="form-control" id="id_password" name="password" type="password" value="">
+                        <ul class="errorlist" id="error_list_id_password">
+                        </ul>
+
+                    </div>
+
+                   <div class="form-group ">
+                        <label class="control-label" for="id_password_repeat">Повторите пароль:</label>
+                        <input class="form-control" id="id_password_repeat" name="password_repeat" type="password" value="">
+                        <ul class="errorlist" id="error_list_id_password_repeat">
+                        </ul>
+
+                    </div>
+
+
+              </div>
+
+              <div class="modal-footer">
+                   {% csrf_token %}
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                <input type="submit" class="btn btn-primary" value="Сохранить">
+              </div>
+         </form>
+        </div>
+      </div>
+    </div>
+<!-- change password modal END-->
+
+<form action="." method="post">
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="form-group {% if form.first_name.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_first_name">Имя:</label>
+            {{ form.first_name|addcss:"form-control" }}
+
+        </div>
+        {{ form.first_name.errors }}
+
+        <div class="form-group {% if form.last_name.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_last_name">Фамилия:</label>
+            {{ form.last_name|addcss:"form-control" }}
+
+        </div>
+        {{ form.last_name.errors }}
+
+        <div class="form-group {% if form.email.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_last_name">E-mail:</label>
+            {{ form.email|addcss:"form-control" }}
+
+        </div>
+        {{ form.email.errors }}
+
+
+
+    {% csrf_token %}
+    <input type="submit" value="Отправить" class="btn btn-default"> <input type="button" value="Сменить пароль" class="btn btn-danger" data-toggle="modal" data-target="#changePasswordModal">
+    </form>
+
+
 
 {% endblock %}
