@@ -28,7 +28,7 @@
        {{ form.password.errors }}
 
         {% csrf_token %}
-        <input type="hidden" name="next" value="{% url "account" %}"/>
+        <input type="hidden" name="next" value="{{ next }}"/>
         <input class="btn btn-default" type="submit" value="Войти"/>
     </form>
 

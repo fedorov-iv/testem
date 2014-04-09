@@ -53,7 +53,7 @@
               {% if user.is_authenticated %}
                   <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Вы вошли как: {{ user.username }}<b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                        <li><a href="#">Мой профиль</a></li>
+                        <li class={% active request "^/myprofile/" %}><a href="{% url "user_profile" %}">Мой профиль</a></li>
                         <li class="{% active request "^/mytests/" %}"><a href="{% url "account" %}">Мои тесты</a></li>
                         <li class="{% active request "^/mymaterials/" %}"><a href="{% url "mymaterials" %}">Мои материалы</a></li>
                         <li class="divider"></li>
