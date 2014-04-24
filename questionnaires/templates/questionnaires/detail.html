@@ -1,0 +1,41 @@
+{% extends "inner.html" %}
+{% load project_tags %}
+{% block title %}{{ questionnaire.title }}{% endblock %}
+{% block extra_head %}
+
+{% endblock %}
+
+{% block page_heading %}{{ questionnaire.title }}{% endblock %}
+
+{% block inner_content %}
+
+    {% if questions %}
+        <form method="post">
+            <ol>
+                {% for question in questions %}
+
+                    <li>
+                        <p>{{ question.description }}</p>
+                        {% for variant in question.get_answer_variants %}
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="1">
+                                    {{ variant.title }}
+                                </label>
+                            </div>
+                        {% endfor %}
+
+                    </li>
+
+                {% endfor %}
+
+            </ol>
+            {% csrf_token %}
+            <button type="submit" class="btn btn-default">Сохранить</button>
+        </form>
+    {% else %}
+        <div class="alert alert-info" id="no_answer_variants">
+            <p>В этом тесте еще нет вопросов</p>
+        </div>
+    {% endif %}
+{% endblock %}

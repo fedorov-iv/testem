@@ -19,6 +19,7 @@
                   <th>Автор</th>
                   <th>Вопросов</th>
                   <th>Дата создания</th>
+                  <th style="text-align: right">Действия</th>
 
 
                 </tr>
@@ -31,6 +32,10 @@
                    <td>{{ test.author }}</td>
                   <td><span class="badge">{{ test.objects_count }}</span></td>
                  <td>{{ test.create_date }}</td>
+                <td style="text-align: right">
+                    <button type="button" class="btn btn-default btn-xs">Написать комментарий</button>
+                    <button type="button" class="btn btn-info btn-xs" onclick="window.location.href = '{% url 'questionnaire_detail' test.id %}'">Пройти тест</button>
+                </td>
 
                 </tr>
 

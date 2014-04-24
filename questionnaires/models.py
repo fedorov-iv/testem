@@ -41,6 +41,9 @@ class Question(models.Model):
     def objects_count(self):
         return AnswerVariant.objects.filter(question=self.pk).count()
 
+    def get_answer_variants(self):
+        return AnswerVariant.objects.filter(question=self.pk)
+
     class Meta:
         verbose_name = u'вопрос теста'
         verbose_name_plural = u'вопросы теста'

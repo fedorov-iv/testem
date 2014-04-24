@@ -178,3 +178,11 @@ def questionnaires_list(request, page=1):
                       'active_page': int(page),
                       'pages_count': page_object.num_pages
                   })
+
+
+#  тест (подробно) для заполнения
+def questionnaire_detail(request, questionnaire_id=0):
+    questionnaire = get_object_or_404(Questionnaire, pk=questionnaire_id)
+    questions = Question.objects.filter(questionnaire=questionnaire)
+
+    return render(request, 'questionnaires/detail.html', {'questionnaire':questionnaire, 'questions': questions})
