@@ -3,11 +3,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from questionnaires.forms import QuestionnaireForm, QuestionForm
-from questionnaires.models import Questionnaire, Question, AnswerVariant
+from questionnaires.models import Questionnaire, Question, AnswerVariant, UserAnswer
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404, HttpResponse
 from django.core import serializers
 from django.contrib import messages
+import datetime
 
 
 #  список "моих" тестов
@@ -182,7 +183,39 @@ def questionnaires_list(request, page=1):
 
 #  тест (подробно) для заполнения
 def questionnaire_detail(request, questionnaire_id=0):
-    questionnaire = get_object_or_404(Questionnaire, pk=questionnaire_id)
-    questions = Question.objects.filter(questionnaire=questionnaire)
+    if request.method == 'POST':  # валидация и сохранение ответов
+        questionnaire = get_object_or_404(Questionnaire, pk=request.POST.get("t"))
 
-    return render(request, 'questionnaires/detail.html', {'questionnaire':questionnaire, 'questions': questions})
+        # print request.POST
+        chosen_variants = [int(key.split("_")[1]) for key in request.POST.keys() if key.startswith("v")]  # выбранные варианты
+        user_score = 0  # сумма баллов, набираемая пользователем в тесте
+
+        for chv in chosen_variants:
+            try:
+                av = AnswerVariant.objects.get(pk=chv)
+            except AnswerVariant.DoesNotExist:
+                continue
+
+            user_score += av.weight
+
+        # сохраняем результат в базу
+        ua = UserAnswer()
+        ua.author = request.user
+        ua.title = u'Результат теста "{0}"'.format(questionnaire.title)
+        ua.create_date = datetime.datetime.now()
+        ua.questionnaire = questionnaire
+        ua.test_score = 0
+        ua.user_score = user_score
+        ua.save()
+
+        return redirect(reverse('questionnaire_success', args=[ua.id]))
+
+    else:  # загрузка теста для заполнения
+        questionnaire = get_object_or_404(Questionnaire, pk=questionnaire_id)
+        questions = Question.objects.filter(questionnaire=questionnaire)
+        return render(request, 'questionnaires/detail.html', {'questionnaire': questionnaire, 'questions': questions})
+
+
+def questionnaire_success(request, user_answer_id=0):
+    user_answer = get_object_or_404(UserAnswer, pk=user_answer_id)
+    return render(request, 'questionnaires/success.html', {'user_answer':user_answer})

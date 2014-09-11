@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^tests/$', 'questionnaires.views.questionnaires_list', name='questionnaires_list'),
     url(r'^tests/page/(?P<page>[1-9]\d*)/$', 'questionnaires.views.questionnaires_list'),
     url(r'^tests/(?P<questionnaire_id>[1-9]\d*)/$', 'questionnaires.views.questionnaire_detail', name='questionnaire_detail'),
+    url(r'^tests/success/(?P<user_answer_id>[1-9]\d*)/$', 'questionnaires.views.questionnaire_success', name='questionnaire_success'),
     url(r'^myprofile/', include('myprofile.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
