@@ -1,0 +1,22 @@
+{% extends "inner.html" %}
+{% load project_tags %}
+{% block title %}{{ user_answer.title }}{% endblock %}
+{% block extra_head %}
+
+{% endblock %}
+
+{% block page_heading %}{{ user_answer.title }}{% endblock %}
+
+{% block inner_content %}
+    {%  if user_answer.user_score < user_answer.test_score %}
+        <div class="alert alert-danger">
+            <p><strong>К сожалению, тест "{{ user_answer.questionnaire.title }}" не пройден!</strong></p>
+            <p>Вы набрали {{ user_answer.user_score }} баллов из {{ user_answer.test_score }}</p>
+        </div>
+    {% else %}
+        <div class="alert alert-success">
+            <p><strong>Поздравляем! Тест "{{ user_answer.questionnaire.title }}" пройден!</strong></p>
+            <p>Вы набрали {{ user_answer.user_score }} баллов из {{ user_answer.test_score }}</p>
+        </div>
+    {% endif %}
+{% endblock inner_content %}

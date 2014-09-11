@@ -11,6 +11,7 @@
 
     {% if questions %}
         <form method="post">
+        <input type="hidden" name="t" value="{{ questionnaire.id }}">
             <ol>
                 {% for question in questions %}
 
@@ -19,7 +20,7 @@
                         {% for variant in question.get_answer_variants %}
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" value="1">
+                                    <input type="checkbox" name="v_{{ variant.id }}" value="1">
                                     {{ variant.title }}
                                 </label>
                             </div>
