@@ -6,7 +6,7 @@ urlpatterns = patterns('',
 
     #  административные
     url(r'^$', views.index, name='account'),
-    url(r'^page/(?P<page>[1-9]\d*)/$', views.index),
+    url(r'^data/$', views.index_data, name='account_data'),
     url(r'^createtest/$', views.create_test, name='create_test'),
     url(r'^createtest/(?P<questionnaire_id>[1-9]\d*)/$', views.create_test, name='create_test'),
     url(r'^deletetest/$', views.delete_test, name='delete_test'),

@@ -2,36 +2,54 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from questionnaires.forms import QuestionnaireForm, QuestionForm
 from questionnaires.models import Questionnaire, Question, AnswerVariant, UserAnswer
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404, HttpResponse
 from django.core import serializers
+import json
 from django.contrib import messages
 import datetime
 
 
 #  список "моих" тестов
 @login_required
-def index(request, page=1):
-    tests = Questionnaire.objects.filter(author=request.user)
+def index(request):
+    return render(request, 'questionnaires/index.html')
 
-    per_page = 5
-    page_object = Paginator(tests, per_page)
+
+#  Данные, получаемые через ajax  для списка "моих" тестов
+@login_required
+@csrf_exempt
+def index_data(request):
+
+    sort = request.POST.getlist("sort")
+
+    print sort
+    current = request.POST.get("current", 1)
+    total = Questionnaire.objects.filter(author=request.user).count()
+    row_count = request.POST.get("rowCount", 10)
+    questionnaires = Questionnaire.objects.filter(author=request.user)
+
+    page_object = Paginator(questionnaires, row_count)
     try:
-        curr_page_tests = page_object.page(page)
+        curr_page_questionnaires = page_object.page(current)
     except EmptyPage:
         raise Http404()
 
-    return render(request,
-                  'questionnaires/index.html',
-                  {
+    rows = []
+    for questionnaire in curr_page_questionnaires:
+        rows.append({"id": questionnaire.id,
+                     "title": questionnaire.title,
+                     "is_active": questionnaire.is_active,
+                     "questions": questionnaire.question_set.all().count(),
+                     "create_date": "{0:02d}.{1:02d}.{2}".format(questionnaire.create_date.day, questionnaire.create_date.month, questionnaire.create_date.year),
+                     "description": questionnaire.description}
+        )
 
-                      'tests': curr_page_tests,
-                      'pages': page_object.page_range,
-                      'active_page': int(page),
-                      'pages_count': page_object.num_pages
-                  })
+    ajax_response = {"current": current, "rowCount": row_count, "rows": rows, "total": total}
+    return HttpResponse(json.dumps(ajax_response), content_type="application/json; charset=utf8")
 
 
 #  создание теста
@@ -40,7 +58,6 @@ def create_test(request, questionnaire_id=0):
     questionnaire = None
 
     if questionnaire_id:
-        #questionnaire = Questionnaire.objects.get(pk=questionnaire_id)
         questionnaire = get_object_or_404(Questionnaire, pk=questionnaire_id, author=request.user)
 
     if request.method == 'POST':

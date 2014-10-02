@@ -2,12 +2,46 @@
 {% load project_tags %}
 {% block title %}Мои тесты{% endblock %}
 {% block extra_head %}
+    <!-- Bootgrid files -->
+    <script src="{{ STATIC_URL }}js/jquery.bootgrid.min.js"></script>
+    <link href="{{ STATIC_URL }}css/jquery.bootgrid.css" rel="stylesheet">
+    <!-- Bootgrid files END -->
     <script type="text/javascript">
 
-    //$(document).ready(function(){
-         //$(".alert").alert();
+    $(document).ready(function(){
+        $("#grid-data").bootgrid(
+                {
+                    ajax: true,
+                    post: function ()
+                    {
 
-    //});
+                    },
+                    url: "{% url 'account_data' %}",
+                    formatters: {
+                        "actions": function(column, row)
+                        {
+
+                            return "<button type=\"button\" class=\"btn btn-success btn-xs\" onclick=\"window.location.href = '{% url 'create_test' %}"+ row.id +"/'\">Редактировать</button> <button type=\"button\" class=\"btn btn-danger btn-xs\" onclick=\"deleteTest("+ row.id +", '"+ row.title +"');\">Удалить</button>";
+                        },
+                        "is_active": function(column, row)
+                        {
+                            if(row.is_active == true)
+                                return "<span class=\"glyphicon glyphicon-ok\"></span>";
+                            else
+                                return "<span class=\"glyphicon glyphicon-remove\"></span>";
+                        },
+                        "questions": function(column, row)
+                        {
+                            return "<span class=\"badge\">" + row.questions + "</span>";
+                        }
+
+                    },
+
+                    rowCount: [1, 2, 5, 10]
+                }
+
+        );
+    });
 
 
         function deleteTest(id, objname){
@@ -58,71 +92,20 @@
   <!-- alert END -->
     <button type="button" class="btn btn-default" onclick="window.location.href='{% url 'create_test' %}'" style="float: right">Создать тест</button>
     <div style="clear: both; padding:10px"></div>
-        <div class="table-responsive">
-        {% if tests %}
-            <table class="table table-hover">
+
+            <table id="grid-data" class="table table-hover table-responsive">
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th style="width: 40%">Название теста</th>
-                  <th>Вопросов</th>
-                  <th>Дата создания</th>
-                  <th>Опубликован</th>
-                  <th style="text-align: right">Действия</th>
+                  <th data-column-id="id" data-sortable="true" data-identifier="true" data-type="numeric">#</th>
+                  <th data-column-id="title" data-sortable="true" style="width: 40%">Название теста</th>
+                  <th data-column-id="questions" data-sortable="false" data-formatter="questions">Вопросов</th>
+                  <th data-column-id="create_date" data-sortable="true">Дата создания</th>
+                  <th data-column-id="is_active" data-sortable="true" data-formatter="is_active">Опубликован</th>
+                  <th style="text-align: right" data-sortable="false" data-column-id="actions" data-formatter="actions">Действия</th>
                 </tr>
               </thead>
-              <tbody>
-              {% for test in tests %}
-                <tr>
-                  <td>{{ test.id }}</td>
-                  <td>{{ test.title }}</td>
-                  <td><span class="badge">{{ test.objects_count }}</span></td>
-                 <td>{{ test.create_date }}</td>
-                  <td>
-                      {% if test.is_active %}
-                           <span class="glyphicon glyphicon-ok"></span>
-                      {% else %}
-                           <span class="glyphicon glyphicon-remove"></span>
-                      {% endif %}
-                  </td>
-                  <td  align="right">
-                      <button type="button" class="btn btn-success btn-xs" onclick="window.location.href = '{% url 'create_test' %}{{ test.id }}/'">Редактировать</button>
-                      <button type="button" class="btn btn-danger btn-xs" onclick="deleteTest({{ test.id }}, '{{ test.title }}');">Удалить</button>
-                  </td>
-                </tr>
 
-              {% endfor %}
-              </tbody>
             </table>
-         {% else  %}
-            <div class="alert alert-info">
-                <p>У вас еще нет ни одного теста</p>
-            </div>
-         {% endif %}
-          </div>
-    <ul class="pagination">
-    {% if active_page == 1 %}
-        <li class="disabled"><span>&laquo;</span></li>
-    {% else %}
-        <li ><a  href="{% url "account" %}page/{{ active_page|add:"-1" }}/"><span>&laquo;</span></a></li>
-    {% endif %}
 
-
-     {% for page in pages %}
-        {% if page == active_page %}
-             <li class="active"><span>{{ page }}<span class="sr-only">(current)</span></span></li>
-
-        {% else %}
-             <li ><a href="{% url "account" %}page/{{ page }}"><span>{{ page }}</span></a></li>
-
-        {% endif %}
-    {% endfor %}
-    {% if active_page == pages_count %}
-        <li class="disabled"><span>&raquo;</span></li>
-    {% else %}
-        <li ><a  href="{% url "account" %}page/{{ active_page|add:"1" }}/"><span>&raquo;</span></a></li>
-    {% endif %}
-
-    </ul>
 
 {% endblock %}
